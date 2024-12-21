@@ -172,6 +172,11 @@ static std::unique_ptr<Platform> GetPlatform(const optparse::Values& options)
 {
   std::string platform_name = static_cast<const char*>(options.get("platform"));
 
+#if HAVE_DRM
+  if (platform_name == "drm" || platform_name.empty())
+    return Platform::CreateDRMPlatform();
+#endif
+
 #if HAVE_X11
   if (platform_name == "x11" || platform_name.empty())
     return Platform::CreateX11Platform();
@@ -209,23 +214,26 @@ int main(int argc, char* argv[])
   parser->add_option("-p", "--platform")
       .action("store")
       .help("Window platform to use [%choices]")
-      .choices({
-        "headless"
+      .choices({"headless"
 #ifdef __linux__
-            ,
-            "fbdev"
+                ,
+                "fbdev"
+#endif
+#if HAVE_DRM
+                ,
+                "drm"
 #endif
 #if HAVE_X11
-            ,
-            "x11"
+                ,
+                "x11"
 #endif
 #ifdef _WIN32
-            ,
-            "win32"
+                ,
+                "win32"
 #endif
 #ifdef __APPLE__
-            ,
-            "macos"
+                ,
+                "macos"
 #endif
       });
 
