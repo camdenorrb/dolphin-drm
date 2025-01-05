@@ -36,6 +36,7 @@ add_library(common
   Config/Enums.h
   Config/Layer.cpp
   Config/Layer.h
+  Contains.h
   CPUDetect.h
   Crypto/AES.cpp
   Crypto/AES.h
