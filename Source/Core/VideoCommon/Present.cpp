@@ -431,6 +431,11 @@ float Presenter::CalculateDrawAspectRatio(bool allow_stretch) const
       resulting_aspect_ratio =
           source_aspect_ratio * (g_ActiveConfig.GetCustomAspectRatio() / (4.0f / 3.0f));
     }
+    else if (aspect_mode == AspectMode::ForceMelee)
+    {
+      return SourceAspectRatioToMelee(source_aspect_ratio);
+    }
+
     // For the "custom stretch" mode, we force the exact target aspect ratio, without
     // acknowledging the difference between the source aspect ratio and 4:3.
     else if (aspect_mode == AspectMode::CustomStretch)
@@ -462,11 +467,6 @@ float Presenter::CalculateDrawAspectRatio(bool allow_stretch) const
       // resolution
       resulting_aspect_ratio /= 2.0;
     }
-  }
-
-  if (aspect_mode == AspectMode::ForceMelee)
-  {
-    return SourceAspectRatioToMelee(source_aspect_ratio);
   }
 
   return resulting_aspect_ratio;

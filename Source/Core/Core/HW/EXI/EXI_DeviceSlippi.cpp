@@ -3078,7 +3078,7 @@ void CEXISlippi::DMAWrite(u32 _uAddr, u32 _uSize)
 {
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
-  u8* mem_ptr = memory.GetPointer(_uAddr);
+  u8* mem_ptr = memory.GetPointerForRange(_uAddr, _uSize);
 
   u32 buf_loc = 0;
 

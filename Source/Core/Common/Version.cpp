@@ -33,20 +33,15 @@ const std::string& GetSemVerStr()
 
 const std::string& GetScmRevStr()
 {
-  static const std::string scm_rev_str = EMULATOR_NAME " "
-  // Note this macro can be empty if the master branch does not exist.
-#if 1 - SCM_COMMITS_AHEAD_MASTER - 1 != 0
-                                                       "[" SCM_BRANCH_STR "] "
-#endif
-
-#ifdef __INTEL_COMPILER
-      BUILD_TYPE_STR SCM_DESC_STR "-ICC";
+#ifndef IS_PLAYBACK
+  static const std::string scm_rev_str = "Mainline - Slippi (" SLIPPI_REV_STR ")" BUILD_TYPE_STR;
 #else
   static const std::string scm_rev_str =
       "Mainline - Slippi (" SLIPPI_REV_STR ") - Playback" BUILD_TYPE_STR;
 #endif
   return scm_rev_str;
 }
+
 
 const std::string& GetScmRevGitStr()
 {

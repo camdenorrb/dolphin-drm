@@ -33,6 +33,7 @@
 #include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/QtUtils/SignalBlocking.h"
 #include "DolphinQt/Settings.h"
+#include "UICommon/AutoUpdate.h"
 
 #ifdef USE_DISCORD_PRESENCE
 #include "UICommon/DiscordPresence.h"

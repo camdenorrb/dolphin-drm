@@ -430,9 +430,10 @@ void AudioPane::OnVolumeChanged(int volume)
   m_volume_indicator->setText(tr("%1%").arg(volume));
 
 #ifndef IS_PLAYBACK
-  if (Core::GetState() == Core::State::Running)
+  auto& system = Core::System::GetInstance();
+
+  if (Core::GetState(system) == Core::State::Running)
   {
-    auto& system = Core::System::GetInstance();
     auto& exi_manager = system.GetExpansionInterface();
     ExpansionInterface::CEXISlippi* slippi_exi = static_cast<ExpansionInterface::CEXISlippi*>(
         exi_manager.GetDevice(ExpansionInterface::Slot::B));

@@ -135,11 +135,6 @@ jobs:
           fsutil file createnew portable.txt 0
           7z a $FILE_NAME .\*
           move $FILE_NAME ..\..\artifact\
-      - name: "Publish"
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: "./artifact/"
   linux:
     needs: [pre_build]
     if: ${{ needs.pre_build.outputs.should_skip != 'true' }}
@@ -228,23 +223,6 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           chmod +x ./build-appimage.sh && ./build-appimage.sh ${{ matrix.build_config }}
-      - name: "Package"
-        working-directory: ${{ github.workspace }}
-        run: |
-          mkdir artifact
-          FILE_NAME=${{ env.CURR_DATE }}-${{ env.GIT_HASH }}-${{ env.GIT_TAG }}-${{ matrix.artifact_name }}.zip
-          chmod +x ./*.AppImage
-          zip -r "${FILE_NAME}" ./*.AppImage*
-          zip -r -j "${FILE_NAME}" ./*.AppImage*
-          pushd ./AppDir/usr/bin/
-          zip -r -u "../../../${FILE_NAME}" ./Sys
-          popd
-          mv "${FILE_NAME}" ./artifact/
-      - name: "Publish"
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: "./artifact/"
   macOS:
     needs: [pre_build]
     if: ${{ needs.pre_build.outputs.should_skip != 'true' }}
@@ -349,11 +327,6 @@ jobs:
         run: |
           /usr/bin/codesign -f -s "${{ secrets.APPLE_IDENTITY_HASH }}" --deep --options runtime ./artifact/${{ env.FILE_NAME }}.dmg
           chmod +x Tools/notarize_netplay.sh && ./Tools/notarize_netplay.sh ./artifact/${{ env.FILE_NAME }}.dmg
-      - name: "Publish"
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: "./artifact/"
       #- name: "Enable Admin Debugging via SSH (if failed)"
       # if: failure()
       # uses: luchihoratiu/debug-via-ssh@main

@@ -50,14 +50,16 @@ u32 SlippiGameFileLoader::LoadFile(std::string file_name, std::string& data)
   std::string file_contents;
   File::ReadFileToString(game_file_path, file_contents);
 
+  Core::System& system = Core::System::GetInstance();
+
   // If the file was a diff file and the game is running, load the main file from ISO and apply
   // patch
   if (game_file_path.substr(game_file_path.length() - 5) == ".diff" &&
-      Core::GetState() == Core::State::Running)
+      Core::GetState(system) == Core::State::Running)
   {
     std::vector<u8> buf;
     INFO_LOG_FMT(SLIPPI, "Will process diff");
-    Core::System::GetInstance().GetDVDThread().ReadFile(file_name, buf);
+    system.GetDVDThread().ReadFile(file_name, buf);
     std::string diff_contents = file_contents;
     decoder.Decode((char*)buf.data(), buf.size(), diff_contents, &file_contents);
   }

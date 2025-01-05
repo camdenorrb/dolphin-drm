@@ -285,9 +285,10 @@ void SlippiPane::ToggleJukebox(bool checked)
   Config::SetBase(Config::SLIPPI_ENABLE_JUKEBOX, checked);
   m_music_volume_slider->setDisabled(!checked);
 
-  if (Core::GetState() == Core::State::Running)
+  auto& system = Core::System::GetInstance();
+
+  if (Core::GetState(system) == Core::State::Running)
   {
-    auto& system = Core::System::GetInstance();
     auto& exi_manager = system.GetExpansionInterface();
     ExpansionInterface::CEXISlippi* slippi_exi = static_cast<ExpansionInterface::CEXISlippi*>(
         exi_manager.GetDevice(ExpansionInterface::Slot::B));
@@ -301,9 +302,10 @@ void SlippiPane::OnMusicVolumeUpdate(int volume)
 {
   Config::SetBase(Config::SLIPPI_JUKEBOX_VOLUME, volume);
   m_music_volume_percent->setText(tr(" %1%").arg(volume));
-  if (Core::GetState() == Core::State::Running)
+  auto& system = Core::System::GetInstance();
+
+  if (Core::GetState(system) == Core::State::Running)
   {
-    auto& system = Core::System::GetInstance();
     auto& exi_manager = system.GetExpansionInterface();
     ExpansionInterface::CEXISlippi* slippi_exi = static_cast<ExpansionInterface::CEXISlippi*>(
         exi_manager.GetDevice(ExpansionInterface::Slot::B));

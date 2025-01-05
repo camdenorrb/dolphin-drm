@@ -21,8 +21,28 @@ fi
 # Move into the build directory, run CMake, and compile the project
 mkdir -p build
 pushd build
-cmake ${CMAKE_FLAGS} ../
-cmake --build . --target dolphin-emu -- -j$(nproc)
+
+
+cmake .. -G Ninja \
+-DLINUX_LOCAL_DEV=true \
+-DENABLE_QT=ON \
+-DENABLE_VULKAN=ON \
+-DFASTLOG=OFF \
+-DENABLE_AUTOUPDATE=OFF \
+-DENCODE_FRAMEDUMPS=ON \
+-DCMAKE_BUILD_TYPE=Release \
+-DENABLE_ANALYTICS=OFF \
+-DUSE_RETRO_ACHIEVEMENTS=OFF \
+-DUSE_DISCORD_PRESENCE=OFF \
+-DCMAKE_CXX_FLAGS="-march=native -mtune=native -flto -O3 -pipe" \
+-DCMAKE_C_FLAGS="-march=native -mtune=native -flto -O3 -pipe" \
+-DCMAKE_EXE_LINKER_FLAGS="-flto -O3 -pipe" \
+-DCMAKE_SHARED_LINKER_FLAGS="-flto -O3 -pipe" \
+-DCMAKE_MODULE_LINKER_FLAGS="-flto -O3 -pipe" \
+-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+
+ninja
+
 popd
 
 # Copy the Sys folder in
